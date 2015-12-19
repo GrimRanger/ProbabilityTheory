@@ -5,8 +5,7 @@ import time
  
  
 class Adjacency(object):
-    """Describes the adjacency relationship among the nodes in a graph.
- 
+    """ 
     node: a list of one vertex, or contracted vertices.
  
     edge: a list of vertices that 'node' is adjacent to.
@@ -26,19 +25,25 @@ class Adjacency(object):
  
  
 def cut(graph):
-    """Returns two contracted Adjacency where graph is cut.
+    """ Main algorithm. Returns two contracted Adjacency where graph is cut.
  
     graph: a list of Adjacency objects.
     """
- 
+    #while |V| > 2 do
     if len(graph) == 2:
         return graph
     else:
+        #Get random edge(get 1 pick, get 2 pick)
         rand_pick = random.choice(graph)
+        #choice second pick
         merge_node = random.choice(rand_pick.edge)
+        #get second pick
         merge_pick = [i for i in graph if merge_node in i.node]
+        #add new vertex and edges
         rand_pick.contract(merge_pick[0])
+        #remove old vertex
         graph.remove(merge_pick[0])
+        #return V
         return cut(graph)
  
  
@@ -49,7 +54,6 @@ def min_cut(graph):
     trial_nu = int(math.pow(len(graph), 1) * math.log(len(graph)))
     min_cross = float('inf')
     for i in range(trial_nu):
-        #!!!must call cut on a DEEP COPY of the graph!!!
         trial = cut(copy.deepcopy(graph))
         cut_cross = len(trial[0].edge)
         if cut_cross < min_cross:
@@ -67,7 +71,7 @@ def read_graph(input_file):
 
  
 def main():
-    graph_file = open('test4.txt')   
+    graph_file = open('kargerMinCut.txt')   
     graph = read_graph(graph_file)
    
     return min_cut(graph)
